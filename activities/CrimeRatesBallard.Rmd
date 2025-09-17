@@ -23,12 +23,12 @@ crimes <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads
 
 ### Task 3: Use janitor to clean up the column names
 
-
+Done in Task 2
 
 ### Task 4: Calculate the total crime rate for each year (picking our unit!)
 
 ```{r}
-crimes |> mutate(total_rate = grand_total/population * 10000)
+crimes <- crimes |> mutate(total_rate = grand_total/population * 10000)
 ```
 
 
@@ -45,7 +45,7 @@ crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/populat
 
 Write a few sentences about what you found in the data. What years had the highest crime rates? What years had the lowest crime rates? Does the pattern match your expectations?
 
-
+The years 1980, 1981, 1979, 1995, 1992, 1991, 1994, 1993, 1996 and 1982 are the years with the highest total rate as they are all over 600. 1980 and 1981 have the highest rates with 662.7243 and 656.3318 respectively with the next highest being at 629.7132. The years with the lowest rates were the in the 2010s, these being 2020, 2019, 2018, 2017, 2016, 2015 and 2014, all of which are below 300. This makes sense in my opinion. As time goes on and technological improvements are made, it is easier to identify crimes and less people are incentivized to commit them because they are less likely to get away with it. 
 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
