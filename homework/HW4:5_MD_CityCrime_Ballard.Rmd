@@ -63,3 +63,19 @@ With their smaller population, Ocean City has a high rate of both violent and pr
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: 
+Calculating percentiles using ntile().
+```{r}
+md_cities_percentiles <- md_cities |> mutate(percentile = ntile(violent2020, 100))
+```
+10 cities are above the 90th percentile and one other one is at 90. 
+
+Calculating IQR
+```{r}
+md_cities |> summarize(IQR(violent2020))
+```
+
+Do your results change your best story idea from the previous homework?
+
+I think that the results from this homework assignment would actually be able to booster the story idea I had in the previous homework assignment. It shows that Ocean City, despite being one of the smaller cities, is in the 94th percentile for violent crime in 2020. I could use this as context in this potential story to show how crime happens in Ocean City. 
