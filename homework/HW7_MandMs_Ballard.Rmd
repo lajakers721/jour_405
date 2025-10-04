@@ -1,0 +1,79 @@
+---
+title: "HW7_MandMs"
+date: 10/1/2025
+---
+
+
+In this assignment, you'll be picking up where you left off with the M&Ms activity. You'll load the data and perform some basic statistical analysis. Follow the steps below to complete the assignment.
+
+### Task 1: Load the tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+
+### Task 2: Load an M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
+```{r}
+mms <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv")
+```
+
+
+### Task 3: Sample 5 rows of data from the dataset, and then sample 10 rows, saving each to separate dataframes called sample5 and sample10. Be sure to use set.seed(1234) before you start.
+```{r}
+set.seed(1234)
+sample_5 <- mms |> sample_n(5)
+sample_10 <- mms |> sample_n(10)
+```
+
+
+### Task 4: Calculate the mean, median and standard deviation of red M&Ms from each of the samples.
+```{r}
+sample_5 |> summarize(mean = mean(red), sd = sd(red), median = median(red))
+
+sample_10 |> summarize(mean = mean(red), sd = sd(red), median = median(red))
+```
+
+
+### Task 5: Calculate the mean, median and standard deviation of red M&Ms from the population
+
+```{r}
+mms |> summarize(mean = mean(red), sd = sd(red), median = median(red))
+```
+
+### Task 6: Make three histograms: one each for sample5, sample10 and the original dataset. Include a headline. Use a consistent binwidth.
+
+```{r}
+mms |> 
+  ggplot() + 
+  geom_histogram(aes(x = red), binwidth = 5) +
+  labs(title = "Original Dataset", x = "Red M&Ms", y="count")
+
+sample_10 |> 
+  ggplot() + 
+  geom_histogram(aes(x = red),  binwidth = 5) +
+  labs(title = "Sample of 10", x = "Red M&Ms", y="count")
+
+sample_5 |> 
+  ggplot() + 
+  geom_histogram(aes(x = red),  binwidth = 5) +
+  labs(title = "Sample of 5", x = "Red M&Ms", y="count")
+```
+
+
+### Task 7: Answer questions
+
+
+Compare the three sets of means, standard deviations and histograms. Which are more helpful to you in understanding the accuracy of the samples?
+A: For me, the most helpful was having the means. In my eyes, the sample means should be similar to that of the population's mean to prove that it is an accurate or inaccurate representation of the population. 
+
+What does this exercise tell you about the relationship between sample size and estimate accuracy?
+A: It is not from this exercise, but I can tell that sample size and estimate accuracy would usually have an inverse relationship. I feel the random samples that I achieved might not of been the best for conveying that point. The reason I think this is that if you are taking five out of a population of 100, you can get five really low numbers even if there are some higher numbers. This would skew the data downward. 
+
+How does random sampling introduce variation into statistical estimates?
+A: Random sampling introduces variation into statistical estimates as you are getting just that, a random sample. It removes bias from the equation as you do not know who is being selected plus the randomness could lead to a lot of differentiation away from a mean. 
+
+If you repeated this process, would the samples always be identical? Why or why not?
+A: They would not always be identical. This is because by running the code, you are taking five or ten random pieces of data and placing them into a separate dataset. So it is possible for it to be identical, but it is unlikely because of the difference in data points. 
+
+When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
