@@ -9,14 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Loading the tidyverse
+## Loading the tidyverse and janitor
 ```{r}
 library(tidyverse)
+library(janitor)
 ```
 
 ##Loading the data
 ```{r}
-billboard_100 <- read_csv("billboard.csv")
+billboard_100 <- read_csv("billboard.csv") |> clean_names()
 ```
 
 ##Questions about the dataset.
@@ -50,16 +51,16 @@ billboard_100 <- billboard_100  |>
 A: 
 ##Finding the mean, median, max and min for the danceability column
 ```{r}
-billboard_100 |> summarize(median_danceability = median(Danceability, na.rm=TRUE), mean_danceability = mean(Danceability, na.rm=TRUE), min_danceability = min(Danceability, na.rm=TRUE), max_danceability = max(Danceability, na.rm=TRUE), sd_danceability = sd(Danceability, na.rm=TRUE)) 
+billboard_100 |> summarize(median_danceability = median(danceability, na.rm=TRUE), mean_danceability = mean(danceability, na.rm=TRUE), min_danceability = min(danceability, na.rm=TRUE), max_danceability = max(danceability, na.rm=TRUE), sd_danceability = sd(danceability, na.rm=TRUE)) 
 
 ```
 The mean is 62.94723, the median is 64, the lowest value is 14 and the higest value is 98. I got those by just using the functions for each in the code, but I had to sort out the two N/A values in the column by using na.rm. I also added in standard deviation because I think it might be useful. The standard deviation is 15.20548. 
 
 5. Propose a newsworthy hypothesis or hypotheses. 
 A: Below are some newsworthy hypothesis or hypotheses that I came up with:
-- White artists get more number one hits than Black artists. Only problem is that the Black and white artist columns are not yes or no, they are the amount of white or Black artists on the song. Might be harder to sift through data. The null hypothesis would be that there is no relation between race and the alternate would be that there is. 
-- The higher the danceability the better chances of a song hitting number one. Would determine a number and anything higher than that would be considered a higher danceability score. Null hypothesis would be danceability has no effect while alternate would be the inverse and that danceability scores yield more successful songs. 
-- Pop songs are more successful or rock songs are more successful. Like mentioned in three, this could be difficult since some songs fit into multiple categories. Null hypothesis would be they are equally successful I guess while the alternate would be that they are more successful and there is evidence of that. 
+- White artists get more number one hits than Black artists. Only problem is that the Black and white artist columns are not yes or no, they are the amount of white or Black artists on the song. Might be harder to sift through data. The null hypothesis would be that there is no relation between race and the alternative would be that there is. 
+- The higher the danceability the better chances of a song hitting number one. Would determine a number and anything higher than that would be considered a higher danceability score. Null hypothesis would be danceability has no effect while alternative would be the inverse and that danceability scores yield more successful songs. 
+- Pop songs are more successful or rock songs are more successful. Like mentioned in three, this could be difficult since some songs fit into multiple categories. Null hypothesis would be they are equally successful I guess while the alternative would be that they are more successful and there is evidence of that. 
 
 I lean toward the danceability option. Obviously I will be looking at the danceability scores primarily but also the weeks at number one. The more weeks on number one shows that it is a more popular song that has staying power rather than a one hit wonder, shot in the pan song for example. I would focus on the ones with the most weeks and look at their danceability songs as well as the other end to see the danceability scores of some that only did it for a single week. Likely finding the mean for the ones with only one week on top since there are a lot. 
 
@@ -72,9 +73,9 @@ A: My only question is how to best ignore N/A values in a dataset. I used na.rm,
 #First test is Z-Score
 ```{r}
 billboard_100 <- billboard_100 |> mutate(
-    mean_danceability = mean(Danceability, na.rm=TRUE),
-    sd_danceability = sd(Danceability, na.rm=TRUE),
-    z_score = (Danceability - mean_danceability) / sd_danceability
+    mean_danceability = mean(danceability, na.rm=TRUE),
+    sd_danceability = sd(danceability, na.rm=TRUE),
+    z_score = (danceability - mean_danceability) / sd_danceability
   ,.before = 1)
 
 ```
@@ -82,5 +83,28 @@ billboard_100 <- billboard_100 |> mutate(
 Description: 
 By performing this test, I am able to see how many standard deviations away from the mean that a data point is. So I did this with Danceability and put it right in front of the dataset so that I can easily sort it and compare and contrast it. I wanted to look at specifically the danceability scores of the ones that were at number one the most amount of weeks like A Bar Song (Tipsy) and Old Town Road and also the inverse for those on the lower end. For the ones near the top, nothing was out of the ordinary. For all but one song with a double digit amount of weeks at number one, the z-scores fell between -2 and 2, typical values that make up 95% of the data. The one outlier was I Will Always Love You by Whitney Houston which had a z-score of about -2.1 and was at number one for 14 weeks. The other side was harder to search through as there was a wider net with there being more songs with one week at the top. With this though, there were far more outside of the -2 and 2 range. Which means it skews off the path a little bit more, but it is important to take into account the difference in the amount of datapoints that I am looking at. 
 
-I'm starting to think maybe I was looking at it wrong and that there is a certain danceability score that hits the sweet spot to get to the top. A nice number that consistently provides success.
+I'm starting to think maybe I was looking at it wrong and that there is a certain danceability score that hits the sweet spot to get to the top. A nice number that consistently provides success. 
 
+Additionally, I'm not gonna lie, I forgot how to make it so the new columns being put in the dataset is in the front so I researched that on Google. That is why I used .before. If there is another function that I should be using for it please let me know. :)
+
+#Second test is ANOVA
+```{r}
+anova_result <- aov(weeks_at_number_one ~ danceability, data = billboard_100)
+summary(anova_result)
+```
+Description: The ANOVA test above tests the effect that danceability has on the variable weeks_at_number one. Since it responded with ***, that means it is likely that we could reject the null hypothsesis. Additionally the p-value is 0.000513 which lobs that same point up even further. This suggests that danceability has a high effect on the weeks at number one variable. This points to correlation between the two that I can use to disprove the null hypothesis and prove my alternative hypothesis. 
+
+#Data Visualization
+
+```{r}
+ggplot(billboard_100, aes(x = Danceability)) +
+  geom_histogram(bins = 30, fill = "pink", color = "white") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Danceability",
+    x = "Danceability",
+    y = "Count"
+  )
+```
+
+Description: The above plot visualizes the Danceability scores and the commonity of them without having to sort through a lot of different data values. What it reveals is that most songs fall within the 50 to 77 range of danceability scores. So most songs that have reached #1 have had a danceability score within that range. The low lows of the below 25 category is far lower than that of the highest of the highs in the 90 or higher category. Seems to reveal that having a higher danceability score will yield more success for you on the Top 100 chart. 

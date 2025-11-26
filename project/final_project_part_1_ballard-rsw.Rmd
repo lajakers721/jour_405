@@ -1,0 +1,90 @@
+---
+title: "Final Project"
+author: "Ballard"
+date: "2025-11-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading the tidyverse
+```{r}
+library(tidyverse)
+```
+
+##Loading the data
+
+#rsw comment: read_csv is what you want to use
+
+```{r}
+billboard_100 <- read.csv("billboard.csv")
+
+# billboard_100 <- read_csv("billboard.csv")
+```
+
+##Questions about the dataset.
+1. What does it contain and what time period does it cover?
+A: The selected dataset holds 1,177 different songs that are every song that to reach the top of the Billboard Hot 100 between August 4, 1958 and January 11, 2025. With that, there are about 105 variables. These include song, artist, date, weeks at number one, label, overall rating and a ton of others like genre and style. There are far too much to go through each right here. 
+
+2. Which columns will be most important for your analysis?
+A: Ultimately, this would depend on what topic that I lock in on. I could play around with the artist information about whether they are more white, black or male. Danceability could be interesting to see if those tend to be the most common, finding the average and seeing how much are over the mean. I could play with the genres or styles to see which genres or styles have been most successful. I could pair that alongside with the weeks at the top. There are so many different options, but those are the ones that I am looking at the most.  
+
+#rsw comment: you should have made that selection by now. if you had, I could assist you more
+
+3. What's missing that you might need or want?
+A: An additional column that separates the songs that fit into multiple genres. It would make looking through the genres so much easier as right now there are some that fit multiple genres. It could've been colums of genre1 and then genre2, but they are all stacked on top of each other. 
+
+
+#rsw comment:
+try this:
+billboard_100 <- billboard_100  |> 
+  janitor::clean_names()
+  
+  billboard_100 <- billboard_100 |> 
+  separate_wider_delim(
+    cols = cdr_genre,
+    delim = ";",
+    names = c("genre1", "genre2"),
+    too_many = "drop",  # Drop extra columns
+    too_few = "align_start"  # Fill missing with NA
+  ) |> 
+  select(song, artist, date, genre1, genre2, everything())
+
+
+4. Select a relevant column and produce basic descriptive statistics on the mean, median, lowest and highest values. 
+A: 
+##Finding the mean, median, max and min for the danceability column
+```{r}
+billboard_100 |> summarize(median_danceability = median(Danceability, na.rm=TRUE), mean_danceability = mean(Danceability, na.rm=TRUE), min_danceability = min(Danceability, na.rm=TRUE), max_danceability = max(Danceability, na.rm=TRUE), sd_danceability = sd(Danceability, na.rm=TRUE)) 
+
+```
+The mean is 62.94723, the median is 64, the lowest value is 14 and the higest value is 98. I got those by just using the functions for each in the code, but I had to sort out the two N/A values in the column by using na.rm. I also added in standard deviation because I think it might be useful. The standard deviation is 15.20548. 
+
+5. Propose a newsworthy hypothesis or hypotheses. 
+A: Below are some newsworthy hypothesis or hypotheses that I came up with:
+- White artists get more number one hits than Black artists.
+#rsw comment: How many?
+
+Only problem is that the Black and white artist columns are not yes or no, they are the amount of white or Black artists on the song. Might be harder to sift through data. 
+#rsw comment: pretty sure there are no songs listing BOTH white and black artists. how would you test that?
+
+
+- The higher the danceability the better chances of a song hitting number one. Would determine a number and anything higher than that would be considered a higher danceability score. 
+- Pop songs are more successful or rock songs are more successful. Like mentioned in three, this could be difficult since some songs fit into multiple categories. 
+
+Ultimately, of those options, I lean toward the danceability one. This is because I think it is the easiest to execute without as much of a headache.
+
+#rsw comment: challenge yourself and try something outside of your comfort zone
+
+
+
+6. Any questions?
+A: My only question is how to best ignore N/A values in a dataset. I used na.rm, but I'm not sure that is the right or acceptable way, so please let me know what the best way would be. Additionally, are any of those strong enough or do you want it to be more in-depth?
+
+#rsw comment: definitely looking for more depth, as indicated by the comments above.
+--what percentage of white vs Black artists? How did that change over time?
+--is danceability more likely with white or Black artists?
+--how many weeks on Number 1 on white vs Black artists?
+--what are the most common genres by race and how likely are some genres to be hits versus others? Which genre is least likely to have a hit? 
