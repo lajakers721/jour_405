@@ -3,6 +3,7 @@
 title: "Multiple Regression Analysis in R"
 date: 8-24-2025
 ---
+Jake Ballard
 
 # Introduction
 
@@ -55,7 +56,7 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+A: I think that overall this model has its flaws and is useful. The biggest flaw is that there are a lot of factors to take a look at when running it. Overall though it is useful because of the multiple r-squared which shows that 62.32% of the variability in wins is explained by the model. The f-statistic also shows the model is statistically significant. The model fit is mostly positive which indicates that this is a useful model.  
 
 ## Correlation Analysis
 
@@ -81,8 +82,10 @@ The results from our correlation analysis show the strength of the relationships
 
 Which of these three factors - Yards Gained, Takeaways and Points Scored - have the most impact on wins? Are there any that do not seem impactful at all?
 
-ANSWER HERE
+A: The most impactful on wins of the three factors would be Points Scored. I come to this conclusion by looking at the graph and the numbers. On the graph, of the three factors, the circle in the overlap between wins and points scored is the biggest and darkest blue. By then looking at the numbers behind it, the correlation is 0.7078293 between points scored and wins. The takeaways and yards gained have a smaller correlation with takeaways having a higher number than yards gained. So the order is points scored first, takeaways second and yards gained three. With that, yards gained is not impactful all too much. The number is the lowest and on the scale provided in the chart, the circle is quite small and is lower on the scales. Takeaways is the second highest and is still impactful with 0.57041075 as the correlation score. 
 
 ## Using the Model
 
 Without using the words "multiple regression model", describe how you could use this model to cover a team or game.
+
+A: Based on the data and the numbers we have generated we gained knowledge on what is the most impactful factor on wins. From there, you can make the assumption that the team with the most points scored, obviously, but also the most takeaways is more likely to win the game. So this would help if you are doing live updates or you are making a prediction based on the data. 
