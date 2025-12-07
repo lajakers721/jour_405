@@ -1,6 +1,6 @@
 ---
 title: "Multiple Regression Analysis: Maryland Voter Turnout"
-name: "YOUR NAME HERE"
+name: Jake Ballard
 date: 8-24-2025
 ---
 
@@ -27,7 +27,7 @@ head(md_turnout)
 
 Before building our model, let's explore the data to understand the variables and their relationships. Examine the correlation matrix to see how the independent variables relate to each other and to the dependent variable (voter turnout). Which variables seem to be correlated? Are there any that are not correlated at all? Also look at the multiple scatterplots. Which variables seem to have a linear relationship with the dependent variable? Which do not?
 
-ANSWER HERE
+A: The variables with the two highest correlation scores are income and pct_bachelors_higher as well as pct_white and turnout according to the matrix. Using the dependent variable, turnout, the independent variable with the highest correlation is pct_unemployed but it is a negative correlation whereas the two previous ones for instance were strongly positive. On the other side of the spectrum, median_age adn pct_bachelors_higher have zero correlation whatsoever. Some variables with low correlations include income and pct_white, pct_white and pct_bachelors_higher and pct_unemployed and pct_bachelors_higher. Most have a linear relation but population has the least linear as the points are really scattered around. 
 
 
 ```{r}
@@ -90,7 +90,7 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Examine the output of the model, checking the coefficients, residuals, and overall model fit. How well does this multiple variable model predict turnout? Do any of the variables seem to be insignificant? Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+A: I would say it does a pretty good. Looking at the multiple r-squared and adjusted r-squared, they are both above 0.8 which is on the hgiher side. The residual standard error is low which is good since it is not deviating from actual turnout much. The f-statistic also points to a statistically significant result. Intercept is highly significant, the income is somewhat significant and median_age and pct_white are a little significant. The rest of the variables are not significant enough to warrant a star. 
 
 ```{r}
 # Build initial model with all predictors
@@ -104,19 +104,19 @@ summary(initial_model)
 
 Create three alternative models by adding or removing variables to see if we can improve the model's performance. Turnout will always be the dependent variable, but you should alter the independent variables by removing or adding some. Then compare the models using adjusted R-squared values. Are any of the models significantly better than the others?
 
-ANSWER HERE
+A: The original model is much more significant from the r-squared values. Between the new models, model 3, which I used pct_bachelors_higher for was the least significant and noticeably so. It is at 0.05044749 and the next lowest is model 2, income, at 0.1656268 and that is pretty close to model 4, median_age, at 0.2111296. With that model 4 is significantly better than model 3 and model 2 is a good bit of significance better than model 3.   
 
 ```{r}
 # Model 2
-model2 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model2 <- lm(turnout ~ income, data = md_turnout)
 summary(model2)
 
 # Model 3
-model3 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model3 <- lm(turnout ~ pct_bachelors_higher, data = md_turnout)
 summary(model3)
 
 # Model 4
-model4 <- lm(turnout ~ REPLACE ME, data = md_turnout)
+model4 <- lm(turnout ~ median_age, data = md_turnout)
 summary(model4)
 
 # Compare models
@@ -145,4 +145,4 @@ ggplot(model_comparison, aes(x = reorder(Model, Adjusted_R_squared), y = Adjuste
 
 Without using the words "multiple regression model", describe how you could use this analysis to cover an election or voter participation story.
 
-ANSWER HERE
+A: This could be used to predict election results. Based on where candidates rank in different demographics we can see how those demographics affect voter turnout. Then we can compare the data and say this person will win this group and this will help turn the election or something of that sort.
